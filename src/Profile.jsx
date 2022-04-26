@@ -24,7 +24,7 @@ const Profile = () => {
       setUserInfo(null);
     } else {
       oktaAuth.getUser().then((info) => {
-        setUserInfo(info);
+        setUserInfo(oktaAuth.tokenManager.getTokensSync().idToken.claims);
       }).catch((err) => {
         console.error(err);
       });
@@ -71,12 +71,18 @@ const Profile = () => {
           <tbody>
             {Object.entries(userInfo).map((claimEntry) => {
               const claimName = claimEntry[0];
-              const claimValue = claimEntry[1];
+              let claimValue = claimEntry[1];
+              if (typeof claimEntry[1] === 'object' ) {
+                claimValue = JSON.stringify(claimEntry[1],null,3);
+              }
               const claimId = `claim-${claimName}`;
               return (
                 <tr key={claimName}>
                   <td>{claimName}</td>
-                  <td id={claimId}>{claimValue.toString()}</td>
+                  {typeof claimEntry[1] === 'object'
+                    ?<td id={claimId}><pre>{claimValue}</pre></td>
+                    :<td id={claimId}>{claimValue.toString()}</td>
+                  }
                 </tr>
               );
             })}
