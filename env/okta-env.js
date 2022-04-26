@@ -15,7 +15,7 @@ const dotenv = require('dotenv');
 const fs = require('fs');
 const path = require('path');
 
-const TESTENV_FILE = 'testenv';
+const TESTENV_FILE = '.env';
 
 function setEnvironmentVars(envConfig) {
   Object.keys(envConfig).forEach((k) => {
